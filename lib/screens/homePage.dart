@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: SizeConfig.safeBlockVertical * 30,
+                height: SizeConfig.safeBlockVertical * 50,
                 width: double.infinity,
               ),
               Text(
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(
-                height: SizeConfig.safeBlockVertical * 40,
+                height: SizeConfig.safeBlockVertical * 70,
                 width: double.infinity,
               ),
               Padding(
@@ -125,25 +125,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Row(
                       children: [
-                        Text(
-                          "${todayDate.day} ${_months[todayDate.month]} ${todayDate.year}",
-                          style: TextStyle(
-                            color: Color(0xffCDDC39),
-                            fontSize: SizeConfig.blockSizeHorizontal * 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(
-                          width: SizeConfig.safeBlockHorizontal * 10,
-                        ),
                         GestureDetector(
                           onTap: () {
                             _selectTodayDate(context);
                           },
-                          child: Icon(
-                            Icons.calendar_today,
-                            color: Colors.white,
-                            size: SizeConfig.safeBlockHorizontal * 15,
+                          child: Text(
+                            "${todayDate.day} ${_months[todayDate.month]} ${todayDate.year}",
+                            style: TextStyle(
+                              color: Color(0xffCDDC39),
+                              fontSize: SizeConfig.blockSizeHorizontal * 18,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ],
@@ -172,25 +164,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Row(
                       children: [
-                        Text(
-                          "${dob.day} ${_months[dob.month]} ${dob.year}",
-                          style: TextStyle(
-                            color: Color(0xffCDDC39),
-                            fontSize: SizeConfig.blockSizeHorizontal * 18,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(
-                          width: SizeConfig.safeBlockHorizontal * 10,
-                        ),
                         GestureDetector(
                           onTap: () {
                             _selectDOBDate(context);
                           },
-                          child: Icon(
-                            Icons.calendar_today,
-                            color: Colors.white,
-                            size: SizeConfig.safeBlockHorizontal * 15,
+                          child: Text(
+                            "${dob.day} ${_months[dob.month]} ${dob.year}",
+                            style: TextStyle(
+                              color: Color(0xffCDDC39),
+                              fontSize: SizeConfig.blockSizeHorizontal * 18,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ],

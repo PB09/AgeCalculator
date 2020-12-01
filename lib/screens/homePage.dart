@@ -494,6 +494,32 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
+              Container(
+                margin: EdgeInsets.only(
+                  top: SizeConfig.safeBlockVertical * 34,
+                  bottom: SizeConfig.safeBlockVertical * 25,
+                ),
+                width: double.maxFinite,
+                padding: EdgeInsets.symmetric(
+                  vertical: SizeConfig.safeBlockVertical * 20,
+                ),
+                decoration: BoxDecoration(
+                    color: Color(0xffCDDC39),
+                    borderRadius: BorderRadius.circular(
+                      SizeConfig.safeBlockVertical * 8,
+                    )),
+                child: Center(
+                  child: Text(
+                    "GET REMINDER",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: SizeConfig.safeBlockVertical * 30,
+                      letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

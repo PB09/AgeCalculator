@@ -1,6 +1,8 @@
 import 'package:age/age.dart';
+import 'package:age_calculator/services/ad_manager.dart';
 import 'package:age_calculator/services/age_calculation.dart';
 import 'package:age_calculator/shared/size_config.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,6 +42,8 @@ class _HomePageState extends State<HomePage> {
     "Sunday"
   ];
 
+  BannerAd _bannerAd;
+
   Future<Null> _selectTodayDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
@@ -70,6 +74,17 @@ class _HomePageState extends State<HomePage> {
       });
   }
 
+  Future<void> _initAdMob() {
+    // TODO: Initialize AdMob SDK
+    return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+  }
+
+  void _loadBannerAd() {
+    _bannerAd
+      ..load()
+      ..show(anchorType: AnchorType.bottom);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -77,6 +92,18 @@ class _HomePageState extends State<HomePage> {
     _ageDuration = AgeCalculation().calculateAge(todayDate, dob);
     _nextBirthday = AgeCalculation().nextBirthday(todayDate, dob);
     _birthWeekDay = AgeCalculation().nextbday(todayDate, dob);
+    _bannerAd = BannerAd(
+      adUnitId: AdManager.bannerAdUnitId,
+      size: AdSize.banner,
+    );
+    _loadBannerAd();
+  }
+
+  @override
+  void dispose() {
+    // TODO: Dispose BannerAd object
+    _bannerAd?.dispose();
+    super.dispose();
   }
 
   @override
@@ -510,7 +537,7 @@ class _HomePageState extends State<HomePage> {
                     )),
                 child: Center(
                   child: Text(
-                    "GET REMINDER",
+                    "SET REMINDER",
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w700,

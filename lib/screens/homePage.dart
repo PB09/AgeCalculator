@@ -82,8 +82,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _initAdMob() {
-    // TODO: Initialize AdMob SDK
-    return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
   }
 
   void _loadBannerAd() {

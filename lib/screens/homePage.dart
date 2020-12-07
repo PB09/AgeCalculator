@@ -42,6 +42,13 @@ class _HomePageState extends State<HomePage> {
     "Sunday"
   ];
 
+  MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    keywords: <String>['flutterio', 'beautiful apps'],
+    contentUrl: 'https://flutter.io',
+    childDirected: false,
+    testDevices: <String>[], // Android emulators are considered test devices
+  );
+
   BannerAd _bannerAd;
 
   Future<Null> _selectTodayDate(BuildContext context) async {
@@ -89,12 +96,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _initAdMob();
     _ageDuration = AgeCalculation().calculateAge(todayDate, dob);
     _nextBirthday = AgeCalculation().nextBirthday(todayDate, dob);
     _birthWeekDay = AgeCalculation().nextbday(todayDate, dob);
     _bannerAd = BannerAd(
       adUnitId: AdManager.bannerAdUnitId,
-      size: AdSize.banner,
+      size: AdSize.smartBanner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event is $event");
+      },
     );
     _loadBannerAd();
   }

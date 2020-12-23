@@ -28,6 +28,7 @@ dependencies:
   google_fonts: ^1.1.1
   table_calendar: ^2.3.0
   firebase_admob: ^0.10.3
+  url_launcher: ^5.7.10
 
 dev_dependencies:
   flutter_test:

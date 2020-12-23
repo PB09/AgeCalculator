@@ -1,6 +1,8 @@
 import 'package:age_calculator/screens/homePage.dart';
 import 'package:age_calculator/shared/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:age_calculator/services/launch_calender.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,6 +29,15 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatelessWidget {
+  _launchURL() async {
+    String url = LaunchCalender.getPlatformCalender;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -86,13 +97,16 @@ class MainPage extends StatelessWidget {
                     SizeConfig.safeBlockVertical * 8,
                   )),
               child: Center(
-                child: Text(
-                  "SET REMINDER",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: SizeConfig.safeBlockVertical * 30,
-                    letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
+                child: FlatButton(
+                  onPressed: _launchURL,
+                  child: Text(
+                    "SET REMINDER",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: SizeConfig.safeBlockVertical * 30,
+                      letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
+                    ),
                   ),
                 ),
               ),

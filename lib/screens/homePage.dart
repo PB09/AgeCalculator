@@ -1,9 +1,9 @@
 import 'package:age/age.dart';
 import 'package:age_calculator/services/age_calculation.dart';
+import 'package:age_calculator/services/launch_calender.dart';
 import 'package:age_calculator/shared/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:age_calculator/services/launch_calender.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -528,6 +528,8 @@ class _HomePageState extends State<HomePage> {
                 child: Center(
                   child: FlatButton(
                     onPressed: _launchURL,
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
                     child: Text(
                       "SET REMINDER",
                       style: TextStyle(

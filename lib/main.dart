@@ -75,11 +75,12 @@ class _MainPageState extends State<MainPage> {
     // TODO: implement initState
     super.initState();
     FacebookAudienceNetwork.init(
-      testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6", //optional
-    );
+        //testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6", //optional
+        );
     _loadInterstitialAd();
     setState(() {
       _currentAd = FacebookBannerAd(
+        placementId: "142346887348606_142350877348207",
         bannerSize: BannerSize.STANDARD,
         listener: (result, value) {
           print("Banner Ad: $result --> $value");

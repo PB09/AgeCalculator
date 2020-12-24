@@ -144,6 +144,7 @@ class _MainPageState extends State<MainPage> {
             Flexible(
               child: Align(
                 alignment: Alignment(0,1),
+                child: _currentAd,
               ),
               fit: FlexFit.tight,
               flex: 2,

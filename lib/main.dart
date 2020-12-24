@@ -1,10 +1,10 @@
 import 'package:age_calculator/screens/homePage.dart';
-import 'package:age_calculator/shared/size_config.dart';
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:age_calculator/services/launch_calender.dart';
+import 'package:age_calculator/shared/size_config.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,19 +14,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: "Product Sans",
-          scaffoldBackgroundColor: Colors.black,
-          // primaryColor: Colors.black,
-          //accentColor: Colors.black,
-          colorScheme: ColorScheme.light(
-            primary: const Color(0xFF000000),
-            onPrimary: Color(0xffCDDC39),
-            surface: Colors.pink,
-          ),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: "Product Sans",
+        scaffoldBackgroundColor: Colors.black,
+        // primaryColor: Colors.black,
+        //accentColor: Colors.black,
+        colorScheme: ColorScheme.light(
+          primary: const Color(0xFF000000),
+          onPrimary: Color(0xffCDDC39),
+          surface: Colors.pink,
         ),
-        home: MainPage(),
+      ),
+      home: MainPage(),
     );
   }
 }
@@ -53,15 +53,16 @@ class _MainPageState extends State<MainPage> {
     width: 0.0,
   );
 
-  void _loadInterstitialAd(){
+  void _loadInterstitialAd() {
     FacebookInterstitialAd.loadInterstitialAd(
       placementId: "142346887348606_151234816459813",
-      listener: (result, value){
+      listener: (result, value) {
         print("Interstitial Ad: $result --> $value");
-        if(result == InterstitialAdResult.LOADED){
+        if (result == InterstitialAdResult.LOADED) {
           _isInterstitialAdLoaded = true;
         }
-        if(result == InterstitialAdResult.DISMISSED && value['invalidated'] == true){
+        if (result == InterstitialAdResult.DISMISSED &&
+            value['invalidated'] == true) {
           _isInterstitialAdLoaded = false;
           _loadInterstitialAd();
         }
@@ -80,7 +81,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _currentAd = FacebookBannerAd(
         bannerSize: BannerSize.STANDARD,
-        listener: (result, value){
+        listener: (result, value) {
           print("Banner Ad: $result --> $value");
         },
       );
@@ -149,6 +150,8 @@ class _MainPageState extends State<MainPage> {
               child: Center(
                 child: FlatButton(
                   onPressed: _launchURL,
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                   child: Text(
                     "SET REMINDER",
                     style: TextStyle(
@@ -163,7 +166,7 @@ class _MainPageState extends State<MainPage> {
             ),
             Flexible(
               child: Align(
-                alignment: Alignment(0,1),
+                alignment: Alignment(0, 1),
                 child: _currentAd,
               ),
               fit: FlexFit.tight,
@@ -174,10 +177,11 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
-  _showInterstitialAd(){
-    if(_isInterstitialAdLoaded == true){
+
+  _showInterstitialAd() {
+    if (_isInterstitialAdLoaded == true) {
       FacebookInterstitialAd.showInterstitialAd();
-    }else {
+    } else {
       Fluttertoast.showToast(msg: "Interstitial Ad Fail to load");
     }
   }

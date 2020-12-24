@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:age_calculator/services/launch_calender.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(MyApp());
@@ -45,11 +46,28 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
+  bool _isInterstitialAdLoaded = false;
+
   Widget _currentAd = SizedBox(
     height: 0.0,
     width: 0.0,
   );
 
+  void _loadInterstitialAd(){
+    FacebookInterstitialAd.loadInterstitialAd(
+      placementId: "142346887348606_151234816459813",
+      listener: (result, value){
+        print("Interstitial Ad: $result --> $value");
+        if(result == InterstitialAdResult.LOADED){
+          _isInterstitialAdLoaded = true;
+        }
+        if(result == InterstitialAdResult.DISMISSED && value['invalidated'] == true){
+          _isInterstitialAdLoaded = false;
+          _loadInterstitialAd();
+        }
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -58,6 +76,7 @@ class _MainPageState extends State<MainPage> {
     FacebookAudienceNetwork.init(
       testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6", //optional
     );
+    _loadInterstitialAd();
     setState(() {
       _currentAd = FacebookBannerAd(
         bannerSize: BannerSize.STANDARD,
@@ -77,6 +96,7 @@ class _MainPageState extends State<MainPage> {
           children: [
             GestureDetector(
               onTap: () {
+                _showInterstitialAd();
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
                   return HomePage();
@@ -153,5 +173,12 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     );
+  }
+  _showInterstitialAd(){
+    if(_isInterstitialAdLoaded == true){
+      FacebookInterstitialAd.showInterstitialAd();
+    }else {
+      Fluttertoast.showToast(msg: "Interstitial Ad Fail to load");
+    }
   }
 }

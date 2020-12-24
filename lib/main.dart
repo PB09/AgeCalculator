@@ -3,6 +3,7 @@ import 'package:age_calculator/shared/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:age_calculator/services/launch_calender.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,11 +25,17 @@ class MyApp extends StatelessWidget {
             surface: Colors.pink,
           ),
         ),
-        home: MainPage());
+        home: MainPage(),
+    );
   }
 }
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
   _launchURL() async {
     String url = LaunchCalender.getPlatformCalender;
     if (await canLaunch(url)) {
@@ -36,6 +43,29 @@ class MainPage extends StatelessWidget {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  Widget _currentAd = SizedBox(
+    height: 0.0,
+    width: 0.0,
+  );
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FacebookAudienceNetwork.init(
+      testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6", //optional
+    );
+    setState(() {
+      _currentAd = FacebookBannerAd(
+        bannerSize: BannerSize.STANDARD,
+        listener: (result, value){
+          print("Banner Ad: $result --> $value");
+        },
+      );
+    });
   }
 
   @override
@@ -110,6 +140,13 @@ class MainPage extends StatelessWidget {
                   ),
                 ),
               ),
+            ),
+            Flexible(
+              child: Align(
+                alignment: Alignment(0,1),
+              ),
+              fit: FlexFit.tight,
+              flex: 2,
             ),
           ],
         ),

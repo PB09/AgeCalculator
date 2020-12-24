@@ -1,9 +1,9 @@
 import 'package:age/age.dart';
-import 'package:age_calculator/services/ad_manager.dart';
 import 'package:age_calculator/services/age_calculation.dart';
 import 'package:age_calculator/shared/size_config.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:age_calculator/services/launch_calender.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,14 +42,14 @@ class _HomePageState extends State<HomePage> {
     "Sunday"
   ];
 
-  MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    keywords: <String>['flutterio', 'beautiful apps'],
-    contentUrl: 'https://flutter.io',
-    childDirected: false,
-    testDevices: <String>[], // Android emulators are considered test devices
-  );
-
-  BannerAd _bannerAd;
+  _launchURL() async {
+    String url = LaunchCalender.getPlatformCalender;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   Future<Null> _selectTodayDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -81,41 +81,20 @@ class _HomePageState extends State<HomePage> {
       });
   }
 
-  Future<void> _initAdMob() {
-    FirebaseAdMob.instance.initialize(appId: AdManager.appId);
-  }
-
-  void _loadBannerAd() {
-    _bannerAd
-      ..load()
-      ..show(anchorType: AnchorType.bottom);
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _initAdMob();
     _ageDuration = AgeCalculation().calculateAge(todayDate, dob);
     _nextBirthday = AgeCalculation().nextBirthday(todayDate, dob);
     _birthWeekDay = AgeCalculation().nextbday(todayDate, dob);
-    _bannerAd = BannerAd(
-      adUnitId: AdManager.bannerAdUnitId,
-      size: AdSize.smartBanner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("BannerAd event is $event");
-      },
-    );
-    _loadBannerAd();
   }
 
-  @override
-  void dispose() {
-    // TODO: Dispose BannerAd object
-    _bannerAd?.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: Dispose BannerAd object
+  //   _bannerAd?.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -547,13 +526,16 @@ class _HomePageState extends State<HomePage> {
                       SizeConfig.safeBlockVertical * 8,
                     )),
                 child: Center(
-                  child: Text(
-                    "SET REMINDER",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.safeBlockVertical * 30,
-                      letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
+                  child: FlatButton(
+                    onPressed: _launchURL,
+                    child: Text(
+                      "SET REMINDER",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        fontSize: SizeConfig.safeBlockVertical * 30,
+                        letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
+                      ),
                     ),
                   ),
                 ),

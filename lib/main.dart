@@ -1,10 +1,10 @@
 import 'package:age_calculator/screens/homePage.dart';
+import 'package:age_calculator/services/admobs_manager.dart';
 import 'package:age_calculator/services/launch_calender.dart';
 import 'package:age_calculator/shared/size_config.dart';
-import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 void main() {
   runApp(MyApp());
@@ -37,6 +37,19 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  BannerAd _bannerAd;
+
+  Future<void> _initAdMob() {
+    // TODO: Initialize AdMob SDK
+    return FirebaseAdMob.instance.initialize(appId: AdManager.appId);
+  }
+
+  void _loadBannerAd() {
+    _bannerAd
+      ..load()
+      ..show(anchorType: AnchorType.bottom);
+  }
+
   _launchURL() async {
     String url = LaunchCalender.getPlatformCalender;
     if (await canLaunch(url)) {
@@ -46,47 +59,23 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  bool _isInterstitialAdLoaded = false;
-
-  Widget _currentAd = SizedBox(
-    height: 0.0,
-    width: 0.0,
-  );
-
-  void _loadInterstitialAd() {
-    FacebookInterstitialAd.loadInterstitialAd(
-      placementId: "142346887348606_151234816459813",
-      listener: (result, value) {
-        print("Interstitial Ad: $result --> $value");
-        if (result == InterstitialAdResult.LOADED) {
-          _isInterstitialAdLoaded = true;
-        }
-        if (result == InterstitialAdResult.DISMISSED &&
-            value['invalidated'] == true) {
-          _isInterstitialAdLoaded = false;
-          _loadInterstitialAd();
-        }
-      },
-    );
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    FacebookAudienceNetwork.init(
-        //testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6", //optional
-        );
-    _loadInterstitialAd();
-    setState(() {
-      _currentAd = FacebookBannerAd(
-        placementId: "142346887348606_142350877348207",
-        bannerSize: BannerSize.STANDARD,
-        listener: (result, value) {
-          print("Banner Ad: $result --> $value");
-        },
-      );
-    });
+    _initAdMob();
+    _bannerAd = BannerAd(
+      adUnitId: "ca-app-pub-3940256099942544/6300978111",
+      size: AdSize.banner,
+    );
+    _loadBannerAd();
+  }
+
+  @override
+  void dispose() {
+    // TODO: Dispose BannerAd object
+    _bannerAd?.dispose();
+    super.dispose();
   }
 
   @override
@@ -98,7 +87,6 @@ class _MainPageState extends State<MainPage> {
           children: [
             GestureDetector(
               onTap: () {
-                _showInterstitialAd();
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
                   return HomePage();
@@ -165,25 +153,9 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             ),
-            Flexible(
-              child: Align(
-                alignment: Alignment(0, 1),
-                child: _currentAd,
-              ),
-              fit: FlexFit.tight,
-              flex: 2,
-            ),
           ],
         ),
       ),
     );
-  }
-
-  _showInterstitialAd() {
-    if (_isInterstitialAdLoaded == true) {
-      FacebookInterstitialAd.showInterstitialAd();
-    } else {
-      Fluttertoast.showToast(msg: "Interstitial Ad Fail to load");
-    }
   }
 }

@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
     "November",
     "December"
   ];
+
   List<String> _weekDays = [
     "Week Days",
     "Monday",
@@ -88,13 +89,6 @@ class _HomePageState extends State<HomePage> {
     _nextBirthday = AgeCalculation().nextBirthday(todayDate, dob);
     _birthWeekDay = AgeCalculation().nextbday(todayDate, dob);
   }
-
-  // @override
-  // void dispose() {
-  //   // TODO: Dispose BannerAd object
-  //   _bannerAd?.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {

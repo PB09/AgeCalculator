@@ -1,12 +1,12 @@
 import 'package:age_calculator/screens/homePage.dart';
 import 'package:age_calculator/services/launch_calender.dart';
 import 'package:age_calculator/shared/size_config.dart';
+import 'package:age_calculator/shared/fbads_manager.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:io';
 
 Future main() async{
   SystemChrome.setEnabledSystemUIOverlays([]);
@@ -50,24 +50,23 @@ class _MainPageState extends State<MainPage> {
   }
 
   bool _isInterstitialAdLoaded = false;
-  bool _isExitAdLoaded = false;
 
   Widget _currentAd = SizedBox(
     height: 0.0,
     width: 0.0,
   );
 
-  void _loadNativeAdLoaded(){
+  void _loadNativeAd(){
     setState(() {
       _currentAd = FacebookNativeAd(
         adType: NativeAdType.NATIVE_AD,
         height: 350,
         width: double.infinity,
-        placementId: "142346887348606_151925876390707",
+        placementId: FbAdsManager.nativeAdUnitId,
         listener: (result, value) {
           print("Native Ad: $result --> $value");
           if (result == NativeAdResult.ERROR) {
-            _loadInterstitialAd();
+            _loadNativeAd();
           }
         },
       );
@@ -76,7 +75,7 @@ class _MainPageState extends State<MainPage> {
 
   void _loadInterstitialAd() {
     FacebookInterstitialAd.loadInterstitialAd(
-      placementId: "142346887348606_151234816459813",
+      placementId: FbAdsManager.interstitialAdUnitId,
       listener: (result, value) {
         print("Interstitial Ad: $result --> $value");
         if (result == InterstitialAdResult.LOADED) {
@@ -91,30 +90,12 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  void _loadExitAd() {
-    FacebookInterstitialAd.loadInterstitialAd(
-      placementId: "142346887348606_151976013052360",
-      listener: (result, value) {
-        print("Exit Ad: $result --> $value");
-        if (result == InterstitialAdResult.LOADED) {
-          _isExitAdLoaded = true;
-        }
-        if (result == InterstitialAdResult.DISMISSED &&
-            value['invalidated'] == true) {
-          _isExitAdLoaded = false;
-          _loadExitAd();
-        }
-      },
-    );
-  }
-
   @override
   void initState() {
     super.initState();
     FacebookAudienceNetwork.init();
     _loadInterstitialAd();
-    _loadNativeAdLoaded();
-    _loadExitAd();
+    _loadNativeAd();
   }
 
   @override
@@ -193,8 +174,9 @@ class _MainPageState extends State<MainPage> {
             ),
             GestureDetector(
               onTap: (){
-                _showExitAd();
-                exit(0);
+                Future.delayed(const Duration(milliseconds: 300), () {
+                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                });
               },
               child: Container(
                 margin: EdgeInsets.only(
@@ -212,14 +194,62 @@ class _MainPageState extends State<MainPage> {
                       SizeConfig.safeBlockVertical * 8,
                     )),
                 child: Center(
-                  child: Text(
-                    "EXIT",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.safeBlockVertical * 30,
-                      letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "EXIT",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontSize: SizeConfig.safeBlockVertical * 30,
+                          letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(
+                        Icons.logout,
+                        color: Colors.black,
+                        size: SizeConfig.safeBlockVertical * 30,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: SizeConfig.safeBlockHorizontal * 1.5,
+              color: Color(0xffCDDC39),
+              margin: EdgeInsets.symmetric(
+                  horizontal: SizeConfig.safeBlockHorizontal * 12),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                top: SizeConfig.safeBlockVertical * 10,
+                left: SizeConfig.safeBlockHorizontal * 25,
+                right: SizeConfig.safeBlockHorizontal * 25,
+                bottom: SizeConfig.safeBlockVertical * 10,
+              ),
+              width: double.maxFinite,
+              padding: EdgeInsets.symmetric(
+                vertical: SizeConfig.safeBlockVertical * 20,
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(
+                    SizeConfig.safeBlockVertical * 8,
+                  )),
+              child: Center(
+                child: Text(
+                  "ADVERTISEMENT",
+                  style: TextStyle(
+                    color: Color(0xffCDDC39),
+                    fontWeight: FontWeight.w500,
+                    fontSize: SizeConfig.safeBlockVertical * 25,
+                    letterSpacing: SizeConfig.safeBlockHorizontal * 0.8,
                   ),
                 ),
               ),
@@ -232,10 +262,6 @@ class _MainPageState extends State<MainPage> {
               fit: FlexFit.tight,
               flex: 2,
             ),
-            SizedBox(
-              height: SizeConfig.safeBlockVertical * 40,
-              width: double.infinity,
-            ),
           ],
         ),
       ),
@@ -247,14 +273,6 @@ class _MainPageState extends State<MainPage> {
       FacebookInterstitialAd.showInterstitialAd();
     } else {
       Fluttertoast.showToast(msg: "Interstitial Ad Fail to load");
-    }
-  }
-
-  _showExitAd(){
-    if(_isExitAdLoaded == true){
-      FacebookInterstitialAd.showInterstitialAd();
-    } else {
-      Fluttertoast.showToast(msg: "Exit Ad Fail to load");
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:age_calculator/shared/fbads_manager.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -45,12 +46,53 @@ class _HomePageState extends State<HomePage> {
     "Sunday"
   ];
 
+  bool _isInterstitialAdLoadedSetRem = false;
+
+  void _loadInterstitialAdSetReminder() {
+    FacebookInterstitialAd.loadInterstitialAd(
+      placementId: FbAdsManager.interstitialAdUnitIdSetRemHome,
+      listener: (result, value) {
+        print("Interstitial Ad SM - Home PG: $result --> $value");
+        if (result == InterstitialAdResult.LOADED) {
+          _isInterstitialAdLoadedSetRem = true;
+        }
+        if (result == InterstitialAdResult.DISMISSED &&
+            value['invalidated'] == true) {
+          _isInterstitialAdLoadedSetRem = false;
+          _loadInterstitialAdSetReminder();
+        }
+      },
+    );
+  }
+
+  Widget _currentHomeAd = SizedBox(
+    height: 0.0,
+    width: 0.0,
+  );
+
+  void _loadNativeBannerAd(){
+    setState(() {
+      _currentHomeAd = FacebookNativeAd(
+        adType: NativeAdType.NATIVE_BANNER_AD,
+        keepAlive: true,
+        bannerAdSize: NativeBannerAdSize.HEIGHT_50,
+        placementId: FbAdsManager.nativeBannerAdUnitIdHome,
+        listener: (result, value) {
+          print("Native Banner Ad: $result --> $value");
+          if (result == NativeAdResult.ERROR) {
+            _loadNativeBannerAd();
+          }
+        },
+      );
+    });
+  }
+
   _launchURL() async {
     String url = LaunchCalender.getPlatformCalender;
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch $url';
+      Fluttertoast.showToast(msg: "Couldn't launch Calendar");
     }
   }
 
@@ -84,30 +126,12 @@ class _HomePageState extends State<HomePage> {
       });
   }
 
-  Widget _currentHomeAd = SizedBox(
-    height: 0.0,
-    width: 0.0,
-  );
-
-  void _loadBannerAd(){
-    setState(() {
-      _currentHomeAd = FacebookBannerAd(
-        bannerSize: BannerSize.STANDARD,
-        placementId: FbAdsManager.nativeBannerAdUnitId,
-        listener: (result, value) {
-          print("Banner Ad: $result --> $value");
-          if (result == BannerAdResult.ERROR) {
-            _loadBannerAd();
-          }
-        },
-      );
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    _loadBannerAd();
+    FacebookAudienceNetwork.init();
+    _loadNativeBannerAd();
+    _loadInterstitialAdSetReminder();
     _ageDuration = AgeCalculation().calculateAge(todayDate, dob);
     _nextBirthday = AgeCalculation().nextBirthday(todayDate, dob);
     _birthWeekDay = AgeCalculation().nextbday(todayDate, dob);
@@ -119,9 +143,7 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
-        body: Column(
-          children: [
-            Padding(
+        body: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: SizeConfig.safeBlockHorizontal * 15,
               ),
@@ -531,7 +553,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: _launchURL,
+                    onTap: (){
+                      _launchURL();
+                      Future.delayed(const Duration(seconds: 1), () {
+                        _showInterstitialAdSetRim();
+                      });
+                    },
                     child: Container(
                       margin: EdgeInsets.only(
                         top: SizeConfig.safeBlockVertical * 34,
@@ -559,20 +586,25 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
+                  Flexible(
+                    child: Align(
+                      alignment: Alignment(0, 1),
+                      child: _currentHomeAd,
+                    ),
+                    fit: FlexFit.tight,
+                    flex: 2,
+                  ),
                 ],
               ),
             ),
-            Flexible(
-              child: Align(
-                alignment: Alignment(0, 1),
-                child: _currentHomeAd,
-              ),
-              fit: FlexFit.tight,
-              flex: 2,
-            ),
-          ],
-        ),
       ),
     );
+  }
+  _showInterstitialAdSetRim() {
+    if (_isInterstitialAdLoadedSetRem == true) {
+      FacebookInterstitialAd.showInterstitialAd();
+    } else {
+      Fluttertoast.showToast(msg: "Ad Fail to load");
+    }
   }
 }

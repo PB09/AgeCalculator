@@ -31,6 +31,7 @@ dependencies:
   facebook_audience_network: ^0.8.0
   url_launcher: ^5.7.10
   fluttertoast: ^7.1.6
+  flutter_svg: ^0.19.2+1
 
 dev_dependencies:
   flutter_test:
@@ -45,9 +46,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/add_alert-black.svg
+    - assets/calendar_today-black.svg
+    - assets/age-black.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

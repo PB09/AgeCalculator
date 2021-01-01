@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,6 +40,17 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  final Widget setReminderSvg = SvgPicture.asset(
+      'assets/add_alert-black.svg',
+    semanticsLabel: 'Alert'
+  );
+
+  final Widget ageCalcSvg = SvgPicture.asset(
+      'assets/age-black.svg',
+    semanticsLabel: 'Age Calculator'
+  );
+
   _launchURL() async {
     String url = LaunchCalender.getPlatformCalender;
     if (await canLaunch(url)) {
@@ -59,7 +71,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _currentAd = FacebookNativeAd(
         adType: NativeAdType.NATIVE_AD,
-        height: 350,
+        height: 450,
         width: double.infinity,
         placementId: FbAdsManager.nativeAdUnitIdMain,
         listener: (result, value) {
@@ -131,14 +143,23 @@ class _MainPageState extends State<MainPage> {
                       SizeConfig.safeBlockVertical * 8,
                     )),
                 child: Center(
-                  child: Text(
-                    "AGE CALCULATOR",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: SizeConfig.safeBlockVertical * 30,
-                      letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "AGE CALCULATOR",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontSize: SizeConfig.safeBlockVertical * 30,
+                          letterSpacing: SizeConfig.safeBlockHorizontal * 1.0,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      ageCalcSvg,
+                    ],
                   ),
                 ),
               ),
@@ -166,15 +187,24 @@ class _MainPageState extends State<MainPage> {
                       SizeConfig.safeBlockVertical * 8,
                     )),
                 child: Center(
-                  child: Text(
-                      "SET REMINDER",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontSize: SizeConfig.safeBlockVertical * 30,
-                        letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                          "SET REMINDER",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: SizeConfig.safeBlockVertical * 30,
+                            letterSpacing: SizeConfig.safeBlockHorizontal * 1.0,
+                          ),
+                        ),
+                      SizedBox(
+                        width: 10,
                       ),
-                    ),
+                      setReminderSvg,
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -225,40 +255,18 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 15,
+            ),
             Container(
               width: double.infinity,
-              height: SizeConfig.safeBlockHorizontal * 1.5,
+              height: SizeConfig.safeBlockHorizontal * 2.5,
               color: Color(0xffCDDC39),
               margin: EdgeInsets.symmetric(
                   horizontal: SizeConfig.safeBlockHorizontal * 12),
             ),
-            Container(
-              margin: EdgeInsets.only(
-                top: SizeConfig.safeBlockVertical * 10,
-                left: SizeConfig.safeBlockHorizontal * 25,
-                right: SizeConfig.safeBlockHorizontal * 25,
-                bottom: SizeConfig.safeBlockVertical * 10,
-              ),
-              width: double.maxFinite,
-              padding: EdgeInsets.symmetric(
-                vertical: SizeConfig.safeBlockVertical * 20,
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(
-                    SizeConfig.safeBlockVertical * 8,
-                  )),
-              child: Center(
-                child: Text(
-                  "ADVERTISEMENT",
-                  style: TextStyle(
-                    color: Color(0xffCDDC39),
-                    fontWeight: FontWeight.w500,
-                    fontSize: SizeConfig.safeBlockVertical * 25,
-                    letterSpacing: SizeConfig.safeBlockHorizontal * 0.8,
-                  ),
-                ),
-              ),
+            SizedBox(
+              height: 15,
             ),
             Flexible(
               child: Align(

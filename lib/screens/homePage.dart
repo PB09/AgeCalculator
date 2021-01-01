@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:age_calculator/shared/fbads_manager.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -45,6 +46,11 @@ class _HomePageState extends State<HomePage> {
     "Saturday",
     "Sunday"
   ];
+
+  final Widget setReminderSvg = SvgPicture.asset(
+      'assets/add_alert-black.svg',
+      semanticsLabel: 'Alert'
+  );
 
   bool _isInterstitialAdLoadedSetRem = false;
 
@@ -574,14 +580,23 @@ class _HomePageState extends State<HomePage> {
                           SizeConfig.safeBlockVertical * 8,
                         )),
                       child: Center(
-                        child:  Text(
-                          "SET REMINDER",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: SizeConfig.safeBlockVertical * 30,
-                            letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
-                          ),
+                        child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "SET REMINDER",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontSize: SizeConfig.safeBlockVertical * 30,
+                                letterSpacing: SizeConfig.safeBlockHorizontal * 1.5,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            setReminderSvg,
+                          ],
                         ),
                       ),
                     ),

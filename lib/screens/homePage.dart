@@ -48,8 +48,10 @@ class _HomePageState extends State<HomePage> {
   ];
 
   final Widget setReminderSvg = SvgPicture.asset(
-      'assets/add_alert-black.svg',
-      semanticsLabel: 'Alert'
+    'assets/notification_add-black.svg',
+    semanticsLabel: 'Alert',
+    width: 32,
+    height: 32,
   );
 
   bool _isInterstitialAdLoadedSetRem = false;

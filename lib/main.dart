@@ -41,14 +41,18 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
 
-  final Widget setReminderSvg = SvgPicture.asset(
-      'assets/add_alert-black.svg',
-    semanticsLabel: 'Alert'
+  final Widget _setReminderSvg = SvgPicture.asset(
+      'assets/notification_add-black.svg',
+    semanticsLabel: 'Add Alert',
+    width: 32,
+    height: 32,
   );
 
-  final Widget ageCalcSvg = SvgPicture.asset(
-      'assets/age-black.svg',
-    semanticsLabel: 'Age Calculator'
+  final Widget _ageCalcSvg = SvgPicture.asset(
+      'assets/age-cal.svg',
+    semanticsLabel: 'Age Calculator',
+    width: 32,
+    height: 32,
   );
 
   _launchURL() async {
@@ -158,7 +162,7 @@ class _MainPageState extends State<MainPage> {
                       SizedBox(
                         width: 10,
                       ),
-                      ageCalcSvg,
+                      _ageCalcSvg,
                     ],
                   ),
                 ),
@@ -202,7 +206,7 @@ class _MainPageState extends State<MainPage> {
                       SizedBox(
                         width: 10,
                       ),
-                      setReminderSvg,
+                      _setReminderSvg,
                     ],
                   ),
                 ),

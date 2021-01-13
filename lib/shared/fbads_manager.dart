@@ -1,45 +1,30 @@
 import 'dart:io';
 
 class FbAdsManager{
-
-  static String get bannerAdUnitIdMain{
-    if(Platform.isAndroid){
-      return "142346887348606_152391836344111";
-    } else {
-      throw new UnsupportedError("Unsupported platform");
-    }
-  }
   static String get nativeBannerAdUnitIdHome {
     if (Platform.isAndroid) {
-      return "142346887348606_142350877348207";
+      return "319038029286199_319039822619353";
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
   }
   static String get nativeAdUnitIdMain {
     if (Platform.isAndroid) {
-      return "142346887348606_151925876390707";
+      return "319038029286199_319039045952764";
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
   }
   static String get interstitialAdUnitIdAgeCalc {
     if (Platform.isAndroid) {
-      return "142346887348606_151234816459813";
+      return "319038029286199_319039565952712";
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
   }
   static String get interstitialAdUnitIdSetRemHome {
     if (Platform.isAndroid) {
-      return "142346887348606_154179216165373";
-    } else {
-      throw new UnsupportedError("Unsupported platform");
-    }
-  }
-  static String get interstitialAdUnitIdSetRemMain {
-    if (Platform.isAndroid) {
-      return "142346887348606_151976013052360";
+      return "319038029286199_325229635333705";
     } else {
       throw new UnsupportedError("Unsupported platform");
     }

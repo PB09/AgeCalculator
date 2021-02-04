@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "510484765330",
+    "project_id": "age-calculator-f372c",
+    "storage_bucket": "age-calculator-f372c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510484765330:android:43beae70ab9e1cc34b244b",
+        "android_client_info": {
+          "package_name": "com.tech.agecalculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510484765330-rs6t62dsvtse22efgc6qf56c7k0lafii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxM_tu_Nl53in-BTV-O3GZ7ZSQS6A_JkY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510484765330-rs6t62dsvtse22efgc6qf56c7k0lafii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
